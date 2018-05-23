@@ -1,0 +1,15 @@
+<form [hidden]="multi">
+  <div class="checkbox-group formGroup">
+    <div class="checkbox" *ngFor="let in of input">
+      <label><input type="checkbox" (change)="onChange(in, $event.target.checked)"
+         value="in.value">{{in.name}}</label>
+    </div>
+  </div>
+</form>
+<form [hidden]="!multi">
+  <div class="radio-group">
+    <div class="radio" *ngFor="let in of input" (change)="onUpdate(in)">
+      <label><input type="radio" name="user" value="{{in.value}}">{{in.name}}</label>
+    </div>
+  </div>
+</form>
