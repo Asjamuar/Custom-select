@@ -1,1 +1,4 @@
-<app-custom-select [input]="input" [multi]="multi"></app-custom-select>
+<div [formGroup]="inputForm">
+<app-custom-select [input]="input" [multi]="multi" formControlName="selectValue"></app-custom-select>
+</div>
+{{inputForm.value | json}}
