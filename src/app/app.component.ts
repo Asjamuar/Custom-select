@@ -17,15 +17,63 @@ export class AppComponent implements OnInit {
   inputForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.multi = true;
+    this.multi = false;
     this.input = [
       {
         name: 'Adi',
         value: 123
       },
       {
+        name: 'zawkdsnal',
+        value: 3214
+      },
+      {
+        name: 'A23414',
+        value: 11242354
+      },
+      {
+        name: 'Adifsag  ',
+        value: 1214
+      },
+      {
+        name: 'ASidsf',
+        value: 76746894
+      },
+      {
+        name: 'iafshd;eug',
+        value: 231895793146
+      },
+      {
+        name: 'afsduoig',
+        value: 265394817817753
+      },
+      {
+        name: 'udjkshfd',
+        value: 12043903
+      },
+      {
+        name: 'dsafkgyuec,mv',
+        value: 18564
+      },
+      {
+        name: 'aihfdeefow',
+        value: 2141
+      },
+      {
+        name: 'daoishgw',
+        value: 89342
+      },
+      {
+        name: 'asdohi',
+        value: 132522
+      },
+      {
+        name: 'Adasii',
+        value: 23950
+      },
+      {
         name: 'Aditya',
-        value: 456
+        value: 12409
       }
     ];
   }

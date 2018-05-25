@@ -1,4 +1,9 @@
-<div [formGroup]="inputForm">
-<app-custom-select [input]="input" [multi]="multi" formControlName="selectValue"></app-custom-select>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div [formGroup]="inputForm">
+            <app-custom-select [input]="input" [multi]="multi" formControlName="selectValue"></app-custom-select>
+        </div>
+    </div>
 </div>
-{{inputForm.value | json}}
+{{inputForm.value.selectValue | json}}

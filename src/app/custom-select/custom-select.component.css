@@ -1,1 +1,23 @@
 @import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
+
+.option-box {
+    background: white;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-left: 1em;
+}
+
+.active-option {
+    background: grey;
+}
+
+li:hover {
+    background: whitesmoke;
+}
+
+

@@ -1,13 +1,25 @@
-<form>
-  <div class="checkbox-group formGroup" [hidden]="!multi">
-    <div class="checkbox" *ngFor="let in of input">
-      <label><input type="checkbox" (change)="onChangeCheck(in, $event.target.checked)"
-         value="in.value">{{in.name}}</label>
-    </div>
+<div class="form-group">
+  <input [(ngModel)]="searchText" class="form-control" placeholder="search text goes here">
+</div>
+<form [formGroup]="selectForm">
+  <div class="formGroup" [hidden]="!multi">
+    <ul>
+      <div formArrayName="objects" class="option-box" *ngFor="let object of objectsArray.controls | searchFilter : searchText; let i = index;">
+        <div [formGroupName]="i">
+          <li [class.active-option]="object.controls.isActive.value">
+            <label><input type="checkbox" (change)="changeOutput()" formControlName="isActive">{{object.value.name}}</label>      
+          </li>
+        </div>
+      </div>
+    </ul> 
   </div>
-  <div class="radio-group" [hidden]="multi">
-    <div class="radio" *ngFor="let in of input" (change)="onUpdate(in)">
-      <label><input type="radio" name="user" value="{{in.value}}">{{in.name}}</label>
-    </div>
+  <div class="formGroup" [hidden]="multi">
+    <ul>
+      <div class="radio-group" [hidden]="multi">
+        <div class="radio" *ngFor="let in of input" (change)="onUpdate(in)">
+          <li><label><input type="radio" name="user" value="{{in.value}}">{{in.name}}</label></li>
+        </div>
+      </div>
+    </ul> 
   </div>
 </form>
