@@ -24,6 +24,8 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
 
   selectForm: FormGroup;
 
+  focus: boolean;
+
   // For Control Value Accessor
   private onTouch: Function;
   private onModelChange: Function;
@@ -72,7 +74,9 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.focus = false;
+  }
 
   get objectsArray() {
     return <FormArray>this.selectForm.controls['objects'];
@@ -111,5 +115,13 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
     } else {
       return this.result.length + ' options selected';
     }
+  }
+
+  onFocusToggle() {
+    this.focus = true;
+  }
+
+  onFocusOutToggle() {
+    this.focus = false;
   }
 }
