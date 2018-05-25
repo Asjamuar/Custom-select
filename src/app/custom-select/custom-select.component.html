@@ -1,21 +1,34 @@
+<div><b>{{message}}</b></div>
 <div class="form-group">
-  <input [(ngModel)]="searchText" class="form-control" placeholder="search text goes here">
+  <input style="width: 100%" [(ngModel)]="searchText" class="form-control" placeholder="search text goes here">
 </div>
 <form [formGroup]="selectForm">
-  <div class="formGroup" [hidden]="!multi">
+  <div class="formGroup" *ngIf="multi">
     <ul>
-      <div formArrayName="objects" class="option-box" *ngFor="let object of objectsArray.controls | searchFilter : searchText; let i = index;">
+      <div formArrayName="objects" class="option-box" *ngFor="let object of objectsArray.controls; let i = index;">
         <div [formGroupName]="i">
-          <li [class.active-option]="object.controls.isActive.value">
-            <label><input type="checkbox" (change)="changeOutput()" formControlName="isActive">{{object.value.name}}</label>      
+          <li [class.active-option]="object.controls.isActive.value" *ngIf="object.controls.isActive.value">
+            <button class="btn btn-danger" (click)="removeActive(object)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            &nbsp;<label>{{object.value.name}}</label>
           </li>
         </div>
       </div>
-    </ul> 
-  </div>
-  <div class="formGroup" [hidden]="multi">
+    </ul>
+    <hr>
     <ul>
-      <div class="radio-group" [hidden]="multi">
+      <div formArrayName="objects" class="option-box" *ngFor="let object of objectsArray.controls | searchFilter : searchText; let i = index;">
+        <div [formGroupName]="i">
+          <li [class.active-option]="object.controls.isActive.value" *ngIf="!object.controls.isActive.value">
+            <button class="btn btn-info" (click)="setActive(object)"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+            &nbsp;<label>{{object.value.name}}</label>      
+          </li>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div class="formGroup" *ngIf="!multi">
+    <ul>
+      <div class="radio-group">
         <div class="radio" *ngFor="let in of input" (change)="onUpdate(in)">
           <li><label><input type="radio" name="user" value="{{in.value}}">{{in.name}}</label></li>
         </div>

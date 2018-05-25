@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, forwardRef, HostBinding } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, forwardRef, HostBinding, SimpleChanges } from '@angular/core';
 import { InputValue } from '../input-value';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { delay } from 'q';
@@ -54,11 +54,22 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
           value: [this.objects[i].value, Validators.required],
           isActive: [false, Validators.required]
         });
+        fg.get('isActive').markAsTouched();
         this.objectsArray.push(fg);
       }
-    } else {
-      
     }
+  }
+
+  removeActive(object: FormGroup) {
+    object.patchValue({
+      isActive: false
+    });
+  }
+
+  setActive(object: FormGroup) {
+    object.patchValue({
+      isActive: true
+    });
   }
 
   ngOnInit() {}
@@ -67,9 +78,10 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
     return <FormArray>this.selectForm.controls['objects'];
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.objects = this.input;
     this.initForm();
+    this.selectForm.valueChanges.subscribe(change => this.changeOutput());
   }
 
   _onChange(value) {
@@ -79,9 +91,8 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   changeOutput() {
-    const result = this.objectsArray.controls.filter(c => c.value.isActive).map(c => ({value: c.value.value, name: c.value.name }));
-    console.log(result, this.objectsArray);
-    this._onChange(result);
+    this.result = this.objectsArray.controls.filter(c => c.value.isActive).map(c => ({value: c.value.value, name: c.value.name }));
+    this._onChange(this.result);
   }
 
   onUpdate(inp: InputValue) {
@@ -89,6 +100,16 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
       this.result = [];
       this.result.push(inp);
       this._onChange(this.result);
+    }
+  }
+
+  get message() {
+    if (this.result.length === 0) {
+      return 'No option selected';
+    } else if (this.result.length === 1) {
+      return this.result[0].name + ' selected';
+    } else {
+      return this.result.length + ' options selected';
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InputValue } from './input-value';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   input: InputValue[];
 
   inputForm: FormGroup;
+  selectTypeForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.multi = false;
@@ -82,5 +83,14 @@ export class AppComponent implements OnInit {
     this.inputForm = this.fb.group({
       selectValue: ['']
     });
+    this.selectTypeForm = this.fb.group({
+      'type': new FormControl('', [
+
+      ])
+    });
+  }
+
+  changeType() {
+    this.multi = this.selectTypeForm.value.type == 'true' ? true : false;
   }
 }

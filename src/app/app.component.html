@@ -1,9 +1,22 @@
+<br>
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
+        <form [formGroup]="selectTypeForm" (change)="changeType()">
+            <label>
+              <input type="radio" value="false" formControlName="type" checked="checked">
+                <span>Single</span>
+            </label>
+            <br>
+            <label>
+              <input type="radio" value="true" formControlName="type">
+                <span>Multiple</span>
+            </label>
+        </form>
+        <br>
         <div [formGroup]="inputForm">
             <app-custom-select [input]="input" [multi]="multi" formControlName="selectValue"></app-custom-select>
         </div>
+        {{inputForm.value | json}}
     </div>
 </div>
-{{inputForm.value.selectValue | json}}
