@@ -5,6 +5,7 @@
          value="in.value">{{in.name}}</label>
     </div>
   </div>
+  
   <div class="radio-group" [hidden]="multi">
     <div class="radio" *ngFor="let in of input" (change)="onUpdate(in)">
       <label><input type="radio" name="user" value="{{in.value}}">{{in.name}}</label>
