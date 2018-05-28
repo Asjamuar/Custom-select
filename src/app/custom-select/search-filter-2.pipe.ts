@@ -1,12 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { InputValue } from '../input-value';
-import { FormGroup } from '@angular/forms';
 
 @Pipe({
-  name: 'searchFilter'
+  name: 'searchFilter2'
 })
-export class SearchFilterPipe implements PipeTransform {
-  filterLength = 10;
+export class SearchFilter2Pipe implements PipeTransform {
 
   // Searches on the basis of name and value
   transform(input: any, searchText: any, clientSearch: boolean): any {
@@ -16,8 +14,8 @@ export class SearchFilterPipe implements PipeTransform {
       if (searchText && clientSearch) {
         searchText = searchText.toLowerCase();
         const searchValues = input.filter(i => {
-          return (i.value.name.toString().toLowerCase().includes(searchText) ||
-            i.value.value.toString().toLowerCase().includes(searchText));
+          return (i.name.toString().toLowerCase().includes(searchText) ||
+            i.value.toString().toLowerCase().includes(searchText));
         });
         return (searchValues);
       } else {
@@ -27,4 +25,5 @@ export class SearchFilterPipe implements PipeTransform {
       return [];
     }
   }
+
 }

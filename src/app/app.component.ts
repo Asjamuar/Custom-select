@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   multi: boolean;
 
   input: InputValue[];
+  output: string;
 
   inputForm: FormGroup;
   selectTypeForm: FormGroup;
@@ -91,6 +92,19 @@ export class AppComponent implements OnInit {
   }
 
   changeType() {
-    this.multi = this.selectTypeForm.value.type == 'true' ? true : false;
+    this.multi = this.selectTypeForm.value.type === 'true' ? true : false;
+  }
+
+  updateOutput(output: string) {
+    this.output = output;
+  }
+
+  changeInput() {
+    this.input = [
+      {
+        name: 'changed',
+        value: 213
+      }
+    ];
   }
 }

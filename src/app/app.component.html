@@ -13,10 +13,10 @@
                 <span>Multiple</span>
             </label>
         </form>
+        <button (click)="changeInput()">asd</button>
         <br>
         <div [formGroup]="inputForm">
-            <app-custom-select [input]="input" [multi]="multi" formControlName="selectValue"></app-custom-select>
+            <app-custom-select [input]="input" [multi]="multi" [clientSearch]="true" (output)="updateOutput($event)" formControlName="selectValue"></app-custom-select>
         </div>
-        {{inputForm.value | json}}
     </div>
 </div>

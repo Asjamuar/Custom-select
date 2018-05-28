@@ -1,4 +1,5 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, forwardRef, HostBinding, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, forwardRef, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { HostBinding, SimpleChanges, ElementRef, HostListener } from '@angular/core';
 import { InputValue } from '../input-value';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { delay } from 'q';
@@ -17,18 +18,37 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
 
   @Input() input: InputValue[];
   @Input() multi: boolean;
+  @Input() clientSearch = true;
+
+  @Output() output = new EventEmitter<string>();
 
   result: InputValue[] = [];
 
   private objects: InputValue[] = [];
 
   selectForm: FormGroup;
+  queryForm: FormGroup;
 
   focus: boolean;
 
   // For Control Value Accessor
   private onTouch: Function;
   private onModelChange: Function;
+
+  @HostListener('document:click', ['$event'])
+  handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+        if (clickedComponent === this.element.nativeElement) {
+            inside = true;
+        }
+        clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+    if (!inside) {
+      this.focus = false;
+    }
+  }
 
   registerOnTouched(fn) {
     this.onTouch = fn;
@@ -42,14 +62,27 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
     this._onChange(value);
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private element: ElementRef, private cdr: ChangeDetectorRef) {
     this.selectForm = this.fb.group({
       'objects': this.fb.array([])
+    });
+
+    this.queryForm = new FormGroup({
+      'query': new FormControl('', [])
+    });
+
+    this.queryForm.get('query').valueChanges.subscribe(query => {
+      if (!this.clientSearch) {
+        this.output.emit(query);
+      }
     });
   }
 
   initForm() {
     if (this.multi) {
+      while (this.objectsArray.length) {
+        this.objectsArray.removeAt(this.objectsArray.length - 1 );
+      }
       for (let i = 0; i < this.objects.length; i++) {
         const fg = this.fb.group({
           name: [this.objects[i].name, Validators.required],
@@ -62,20 +95,9 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
     }
   }
 
-  removeActive(object: FormGroup) {
-    object.patchValue({
-      isActive: false
-    });
-  }
-
-  setActive(object: FormGroup) {
-    object.patchValue({
-      isActive: true
-    });
-  }
-
   ngOnInit() {
     this.focus = false;
+    this.selectForm.valueChanges.subscribe(v => {this.cdr.detectChanges(); this.changeOutput(); });
   }
 
   get objectsArray() {
@@ -83,9 +105,12 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   ngOnChanges(changes: SimpleChanges) {
+      this.input.sort(function(a, b) {
+      return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+    });
+
     this.objects = this.input;
     this.initForm();
-    this.selectForm.valueChanges.subscribe(change => this.changeOutput());
   }
 
   _onChange(value) {
@@ -104,6 +129,7 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
       this.result = [];
       this.result.push(inp);
       this._onChange(this.result);
+      this.focus = false;
     }
   }
 
@@ -119,9 +145,5 @@ export class CustomSelectComponent implements OnInit, OnChanges, ControlValueAcc
 
   onFocusToggle() {
     this.focus = true;
-  }
-
-  onFocusOutToggle() {
-    this.focus = false;
   }
 }

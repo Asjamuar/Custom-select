@@ -5,12 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { CustomSelectComponent } from './custom-select/custom-select.component';
 import { SearchFilterPipe } from './custom-select/search-filter.pipe';
+import { SearchFilter2Pipe } from './custom-select/search-filter-2.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     CustomSelectComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    SearchFilter2Pipe
   ],
   imports: [
     BrowserModule,
